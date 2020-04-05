@@ -16,24 +16,17 @@ export function CalendarWidget() {
 
   const selectDate = useSelectDateState();
 
-  console.log(selectDate);
-
   return (
     <div>
       {MonthArray[selectDate.month] + ", " + selectDate.year}
       <DayList />
-      <DateList year={2020} month={2} />
+      <DateList year={selectDate.year} month={selectDate.month} />
     </div>
   );
 }
 
 function DayList() {
   const DayArray = useDayArray();
-  const Schedule = useScheduleState();
-
-  // const CountSchedule: number[] = () => {
-
-  // };
 
   return (
     <div className="calendar-widget-daylist">
@@ -54,18 +47,30 @@ type DateListProps = {
 };
 
 function DateList({ year, month }: DateListProps) {
+  // create Date obj
   const StartDate = new Date(year, month, 1);
   const LastDate = new Date(year, month + 1, 0);
+  const Schedule = useScheduleState();
+
+  const monthSchedule = Schedule.filter(
+    schedule => schedule.time.month === month
+  ).sort((a, b) => a.time.date - b.time.date);
+  console.log(`current month Schedule : `);
+  console.log(monthSchedule);
 
   let Weeks: number[] = [0, 1, 2, 3, 4, 5];
   let Days: number[] = [0, 1, 2, 3, 4, 5, 6];
   let countedDate: number = 0;
 
-  const countingDate = (week: number, day: number) => {
+  const ScheduleCounter = (date: number): number => {
+    return Schedule.filter(schedule => schedule.time.date === date).length;
+  };
+
+  const countingDate = (week: number, day: number, value: number) => {
     if (week === 0 && day === StartDate.getDay()) {
       countedDate = 1;
-    } else {
-      countedDate = countedDate + 1;
+    } else if (countedDate > 0) {
+      countedDate = countedDate + value;
     }
 
     return countedDate >= 1 && countedDate <= LastDate.getDate()
@@ -82,7 +87,10 @@ function DateList({ year, month }: DateListProps) {
               <DateButton
                 year={year}
                 month={month}
-                date={countingDate(week, day)}
+                date={countingDate(week, day, 1)}
+                scheduleCount={ScheduleCounter(
+                  countingDate(week, day, 0) || 32
+                )}
               />
             </Grid>
           ))}
@@ -96,9 +104,10 @@ type DateButtonProps = {
   year: number;
   month: number;
   date: number | undefined;
+  scheduleCount: number;
 };
 
-function DateButton({ year, month, date }: DateButtonProps) {
+function DateButton({ year, month, date, scheduleCount }: DateButtonProps) {
   const SelectDispatch = useSelectDispatch();
 
   const handleClick = () => {
@@ -116,7 +125,7 @@ function DateButton({ year, month, date }: DateButtonProps) {
         handleClick();
       }}
     >
-      {date}c : {}
+      {date}c : {scheduleCount}
     </div>
   );
 }

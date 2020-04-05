@@ -52,6 +52,8 @@ function ScheduleReducer(state: ScheduleStateProps, action: ScheduleAction) {
   switch (action.type) {
     case "CREATE_SCHEDULE":
       const newState = state.concat(action.newSchedule);
+      console.log(`calendar context : schedule created`);
+      console.log(action.newSchedule);
       return newState;
     default:
       throw new Error("unhandled Error from Schedule Reducer");
@@ -78,22 +80,26 @@ type SelectAction = {
 
 type SelectDispatch = Dispatch<SelectAction>;
 
-type SelectState = {
-  year: number;
-  month: number;
-  date: number;
-};
-
-const SelectDateState = createContext<SelectState | undefined>(undefined);
+const SelectDateState = createContext<Time | undefined>(undefined);
 
 const SelectDispatchContext = createContext<SelectDispatch | undefined>(
   undefined
 );
 
-function SelectReducer(state: SelectState, action: SelectAction) {
+function SelectReducer(state: Time, action: SelectAction) {
   switch (action.type) {
     case "SELECT_DATE":
-      return action.time;
+      const result = {
+        year: action.time.year,
+        month: action.time.month,
+        date: action.time.date,
+        hour: 0,
+        minute: 0,
+        second: 0
+      };
+      console.log(`calendar context; date selected!`);
+      console.log(result);
+      return result;
     default:
       throw new Error("UNHANDLED ACTION TYPE");
   }
@@ -123,7 +129,10 @@ export function CalendarContextProvider({
   const [selectState, selectDispatch] = useReducer(SelectReducer, {
     year: today.getFullYear(),
     month: today.getMonth(),
-    date: today.getDate()
+    date: today.getDate(),
+    hour: 0,
+    minute: 0,
+    second: 0
   });
 
   const initialScheduleArray = [] as ScheduleStateProps;

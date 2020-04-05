@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, Box, Container } from "@material-ui/core";
+import { Link, Box } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 
 import { useStyles } from "../../MuiTheme";

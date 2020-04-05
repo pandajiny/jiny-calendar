@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Container } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 
 import { CalendarContextProvider } from "./CalendarContext";
 import { CalendarWidget } from "./CalendarWidget";
@@ -10,21 +10,19 @@ export function Calendar() {
   const classes = useStyles();
   return (
     <div className="calendar">
-      <Container maxWidth="md">
-        <CalendarContextProvider>
-          Calendar
-          <div className={classes.flexRoot}>
-            <Grid container>
-              <Grid item md={6}>
-                <CalendarWidget />
-              </Grid>
-              <Grid item md={6}>
-                <Schedules />
-              </Grid>
+      <CalendarContextProvider>
+        Calendar
+        <div className={classes.flexRoot}>
+          <Grid container>
+            <Grid item md={6}>
+              <CalendarWidget />
             </Grid>
-          </div>
-        </CalendarContextProvider>
-      </Container>
+            <Grid item md={6}>
+              <Schedules />
+            </Grid>
+          </Grid>
+        </div>
+      </CalendarContextProvider>
     </div>
   );
 }

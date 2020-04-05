@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Grid } from "@material-ui/core";
 
 import {
@@ -32,7 +32,7 @@ function DayList() {
     <div className="calendar-widget-daylist">
       <Grid container>
         {DayArray.map(day => (
-          <Grid item md>
+          <Grid item md key={day}>
             {day}
           </Grid>
         ))}
@@ -81,10 +81,11 @@ function DateList({ year, month }: DateListProps) {
   return (
     <div className="calendar-widget-date-list">
       {Weeks.map(week => (
-        <Grid container justify="center">
+        <Grid key={week} container justify="center">
           {Days.map(day => (
-            <Grid item md>
+            <Grid item md key={day}>
               <DateButton
+                key={countingDate(week, day, 0)}
                 year={year}
                 month={month}
                 date={countingDate(week, day, 1)}
@@ -121,6 +122,7 @@ function DateButton({ year, month, date, scheduleCount }: DateButtonProps) {
   return (
     <div
       className="calendar-widget-date-button"
+      key={date}
       onClick={() => {
         handleClick();
       }}

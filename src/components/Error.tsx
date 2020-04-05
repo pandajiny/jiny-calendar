@@ -6,8 +6,6 @@ type ErrorProps = {
   errorName: ErrorKind;
 };
 
-function Error({ errorName }: ErrorProps) {
+export function Error({ errorName }: ErrorProps) {
   return <div>Error : {errorName} </div>;
 }
-
-export default Error;

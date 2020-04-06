@@ -1,35 +1,6 @@
 import React from "react";
 
-// Schedule Context
-type Schedule = {
-  _id?: string;
-  requestTime: Time;
-  time: Time;
-  content: Content;
-  user: requestUser;
-};
-
-type requestUser = {
-  email: string;
-  name: string;
-};
-
-type Content = {
-  text: string;
-  isImportant: boolean;
-  kind: ContentType;
-};
-
-type ContentType = "Schedule" | "undefined";
-
-type Time = {
-  year: number;
-  month: number;
-  date: number;
-  hour: number;
-  minute: number;
-  second: number;
-};
+import { Schedule } from "../../Types";
 
 type ScheduleComponentProps = { schedule: Schedule };
 export function ScheduleComponent({ schedule }: ScheduleComponentProps) {

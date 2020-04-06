@@ -1,35 +1,7 @@
 import React, { createContext, useContext, Dispatch, useReducer } from "react";
 
 // Schedule Context
-type Schedule = {
-  _id?: string;
-  requestTime: Time;
-  time: Time;
-  content: Content;
-  user: requestUser;
-};
-
-type requestUser = {
-  email: string;
-  name: string;
-};
-
-type Content = {
-  text: string;
-  isImportant: boolean;
-  kind: ContentType;
-};
-
-type ContentType = "Schedule" | "undefined";
-
-type Time = {
-  year: number;
-  month: number;
-  date: number;
-  hour: number;
-  minute: number;
-  second: number;
-};
+import { Schedule, Time } from "../../Types";
 
 type ScheduleStateProps = Schedule[];
 
@@ -94,7 +66,7 @@ function SelectReducer(state: Time, action: SelectAction) {
         date: action.time.date,
         hour: 0,
         minute: 0,
-        second: 0
+        second: 0,
       };
       console.log(`calendar context; date selected!`);
       console.log(result);
@@ -105,7 +77,7 @@ function SelectReducer(state: Time, action: SelectAction) {
 }
 
 export function CalendarContextProvider({
-  children
+  children,
 }: {
   children: React.ReactNode;
 }) {
@@ -123,7 +95,7 @@ export function CalendarContextProvider({
     "September",
     "October",
     "November",
-    "December"
+    "December",
   ];
   const [selectState, selectDispatch] = useReducer(SelectReducer, {
     year: today.getFullYear(),
@@ -131,7 +103,7 @@ export function CalendarContextProvider({
     date: today.getDate(),
     hour: 0,
     minute: 0,
-    second: 0
+    second: 0,
   });
 
   const initialScheduleArray = [] as ScheduleStateProps;
@@ -202,6 +174,6 @@ export function getCurrentTime(): Time {
     year: current.getFullYear(),
     month: current.getMonth(),
     minute: current.getMinutes(),
-    second: current.getSeconds()
+    second: current.getSeconds(),
   };
 }

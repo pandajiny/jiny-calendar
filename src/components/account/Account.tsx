@@ -1,57 +1,60 @@
 import React, { ReactNode } from "react";
 
-import {
-  Route,
-  Switch,
-  useLocation,
-  useHistory,
-  Redirect
-} from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 import { Link, Box } from "@material-ui/core";
 
 import { Error } from "../Error";
 import { useStyles } from "../../MuiTheme";
+import { getUserState } from "./AccountContext";
+import { Login } from "./login/Login";
+import { useLoginDispatch } from "./login/LoginContext";
 
 export function Account() {
-  let location = useLocation();
-  const history = useHistory();
-
-  const getLoginState = () => {
-    return false;
-  };
-
   return (
     <div className="account">
       Account
       <Switch>
-        <Route path="/account/login" render={() => <AccountLogin />} />
-        <Route
-          path="/account/"
-          exact
-          render={() =>
-            getLoginState() ? <AccountMenu /> : <Redirect to="/account/login" />
-          }
-        />
+        <Route path="/account/login" render={() => <Login />} />
+        <LoginRequired>
+          <Route path="/account/" exact render={() => <AccountMenu />} />
+        </LoginRequired>
         <Route render={() => <Error errorName={"ERROR_404"} />} />
       </Switch>
     </div>
   );
 }
 
+function LoginRequired({ children }: { children: React.ReactNode }) {
+  return (
+    <div>
+      {getUserState().isLoggedIn ? children : <Redirect to="/account/login" />}
+    </div>
+  );
+}
+
 export function AccountMenu() {
   const classes = useStyles();
+  const LoginDispatch = useLoginDispatch();
   return (
     <div className="account-menu">
       <Box className={classes.columnBox}>
         <Link>Profile</Link>
-        <Link>Logout</Link>
-        <Link>Logout</Link>
-        <Link>Logout</Link>
+        <Link
+          onClick={() => {
+            LoginDispatch({ type: "TRY_LOGOUT" });
+          }}
+        >
+          Logout
+        </Link>
       </Box>
     </div>
   );
 }
 
-export function AccountLogin() {
-  return <div>Login</div>;
+export function AccountLogin(): boolean {
+  if (getUserState().isLoggedIn) {
+    return true;
+  } else {
+    return false;
+  }
 }

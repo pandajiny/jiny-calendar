@@ -7,7 +7,6 @@ import { Error } from "../Error";
 import { useStyles } from "../../MuiTheme";
 import { getUserState } from "./AccountContext";
 import { Login } from "./login/Login";
-import { useLoginDispatch } from "./login/LoginContext";
 
 export function Account() {
   return (
@@ -34,18 +33,11 @@ function LoginRequired({ children }: { children: React.ReactNode }) {
 
 export function AccountMenu() {
   const classes = useStyles();
-  const LoginDispatch = useLoginDispatch();
   return (
     <div className="account-menu">
       <Box className={classes.columnBox}>
         <Link>Profile</Link>
-        <Link
-          onClick={() => {
-            LoginDispatch({ type: "TRY_LOGOUT" });
-          }}
-        >
-          Logout
-        </Link>
+        <Link>Logout</Link>
       </Box>
     </div>
   );

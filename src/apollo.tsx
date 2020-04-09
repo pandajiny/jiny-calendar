@@ -10,10 +10,13 @@ export const client = new ApolloClient({
 });
 
 // GQL
-export const TRY_LOGIN = gql`
-  mutation logIn($email: String, $password: String) {
-    logIn(email: $email, password: $password) {
-      name
+export const REQUST_LOGIN = gql`
+  mutation requestLogin($email: String, $password: String) {
+    requestLogin(email: $email, password: $password) {
+      user {
+        name
+        email
+      }
     }
   }
 `;

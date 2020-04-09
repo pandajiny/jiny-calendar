@@ -6,7 +6,7 @@ import { Calendar } from "./components/calendar/Calendar";
 import { Account } from "./components/account/Account";
 import { Error } from "./components/Error";
 
-import { CheckLoginState } from "./functions";
+import { getUserState } from "./functions";
 
 export function Router() {
   return (
@@ -14,7 +14,7 @@ export function Router() {
       <Switch>
         <Route path="/" exact render={() => <Redirect to="/calendar" />} />
         <Route path="/account" render={() => <Account />} />
-        {CheckLoginState() && (
+        {getUserState().name && (
           //  Below Here, You need to Login.
           <Route path="/calendar" render={() => <Calendar />} />
         )}

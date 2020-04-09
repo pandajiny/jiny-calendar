@@ -23,13 +23,16 @@ export function getCurrentTime(): Time {
   };
 }
 
+type UserState = {
+  name: string | null;
+  email: string | null;
+};
+
 // Checking Login State ? children : Return Nothing
-export function CheckLoginState(): boolean {
-  const getLoginState = (): boolean => {
-    console.log("hi");
-    return false;
-  };
-  console.log("check Login");
+export function getUserState(): UserState {
   // return <div>{getLoginState() ? children : <div>dd</div>}</div>;
-  return getLoginState();
+  return {
+    name: localStorage.getItem("name"),
+    email: localStorage.getItem("email"),
+  };
 }

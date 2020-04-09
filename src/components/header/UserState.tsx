@@ -1,6 +1,7 @@
 import React from "react";
-import { getUserState } from "../account/AccountContext";
+
+import { getUserState } from "../../functions";
 
 export function UserState() {
-  return <div>사랑해</div>;
+  return <div>{getUserState().name}</div>;
 }

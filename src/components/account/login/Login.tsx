@@ -1,14 +1,29 @@
-import React from "react";
-import { Switch, Route, useHistory } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Switch, Route, useHistory, useLocation } from "react-router-dom";
 
 // import Component
 import { SubmitEmail } from "./SubmitEmail";
 import { SubmitPassword } from "./SubmitPassword";
 import { LoginResult } from "./Result";
+import { Welcome } from "./Welcome";
 import { Error } from "../../Error";
+
+import { getUserState } from "../../../functions";
 
 export function Login() {
   const history = useHistory();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname === "/account/login/") {
+      if (getUserState().email) {
+        history.push({ pathname: "/account/login/result" });
+      } else {
+        history.push({ pathname: "/account/login/submit_email" });
+      }
+    }
+  });
+
   return (
     <div className="account-login">
       <button
@@ -35,6 +50,7 @@ export function Login() {
           render={() => <SubmitPassword />}
         />
         <Route path="/account/login/result" render={() => <LoginResult />} />
+        <Route path="/account/login/welcome" render={() => <Welcome />} />
         <Route render={() => <Error errorName="ERROR_404" />} />
       </Switch>
     </div>

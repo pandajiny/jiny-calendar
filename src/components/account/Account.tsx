@@ -1,23 +1,29 @@
-import React, { ReactNode } from "react";
-import { Route, Switch, Redirect } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Route, Switch, useHistory } from "react-router-dom";
 
 import { Link, Box } from "@material-ui/core";
 
 // import component
 import { Error } from "../Error";
 import { useStyles } from "../../MuiTheme";
-import { getUserState } from "./AccountContext";
 import { Login } from "./login/Login";
 
-import { CheckLoginState } from "../../functions";
+import { getUserState } from "../../functions";
 
 export function Account() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const history = useHistory();
+  useEffect(() => {
+    if (!getUserState().name) {
+      history.push({ pathname: "/account/login/" });
+    }
+  }, [history]);
   return (
     <div className="account">
       Account
       <Switch>
         <Route path="/account/login" render={() => <Login />} />
-        {CheckLoginState() && (
+        {getUserState().name && (
           <Route path="/account/" exact render={() => <AccountMenu />} />
         )}
         <Route render={() => <Error errorName={"ERROR_404"} />} />
@@ -25,14 +31,6 @@ export function Account() {
     </div>
   );
 }
-
-// function LoginRequired({ children }: { children: React.ReactNode }) {
-//   return (
-//     <div>
-//       {getUserState().isLoggedIn ? children : <Redirect to="/account/login" />}
-//     </div>
-//   );
-// }
 
 export function AccountMenu() {
   const classes = useStyles();
@@ -44,12 +42,4 @@ export function AccountMenu() {
       </Box>
     </div>
   );
-}
-
-export function AccountLogin(): boolean {
-  if (getUserState().isLoggedIn) {
-    return true;
-  } else {
-    return false;
-  }
 }

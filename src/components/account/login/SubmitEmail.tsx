@@ -1,16 +1,22 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { useLoginDispatch } from "./LoginContext";
 
-export function LoginEmail() {
-  const LoginDispatch = useLoginDispatch();
+export function SubmitEmail() {
   const history = useHistory();
   const [email, setEmail] = useState("");
 
+  // console.log(`submit email page loaded`);
+  // console.log(`current LoginRequestState :`);
+  // console.log(LoginRequestState);
+
+  // handing action when button is clicked
   const handleClick = () => {
-    console.log(`loginEmail : Button Clicked ${email}`);
-    LoginDispatch({ type: "SUBMIT_EMAIL", email: email });
-    history.push({ pathname: "/account/login/submit_password" });
+    console.log(`submit email : Button Clicked ${email}`);
+    // LoginRequestDispatch({ type: "SUBMIT_EMAIL", email: email });
+    history.push({
+      pathname: "/account/login/submit_password",
+      state: { email: email },
+    });
   };
 
   return (

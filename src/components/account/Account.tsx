@@ -1,12 +1,15 @@
 import React, { ReactNode } from "react";
-
 import { Route, Switch, Redirect } from "react-router-dom";
+
 import { Link, Box } from "@material-ui/core";
 
+// import component
 import { Error } from "../Error";
 import { useStyles } from "../../MuiTheme";
 import { getUserState } from "./AccountContext";
 import { Login } from "./login/Login";
+
+import { CheckLoginState } from "../../functions";
 
 export function Account() {
   return (
@@ -14,22 +17,22 @@ export function Account() {
       Account
       <Switch>
         <Route path="/account/login" render={() => <Login />} />
-        <LoginRequired>
+        {CheckLoginState() && (
           <Route path="/account/" exact render={() => <AccountMenu />} />
-        </LoginRequired>
+        )}
         <Route render={() => <Error errorName={"ERROR_404"} />} />
       </Switch>
     </div>
   );
 }
 
-function LoginRequired({ children }: { children: React.ReactNode }) {
-  return (
-    <div>
-      {getUserState().isLoggedIn ? children : <Redirect to="/account/login" />}
-    </div>
-  );
-}
+// function LoginRequired({ children }: { children: React.ReactNode }) {
+//   return (
+//     <div>
+//       {getUserState().isLoggedIn ? children : <Redirect to="/account/login" />}
+//     </div>
+//   );
+// }
 
 export function AccountMenu() {
   const classes = useStyles();

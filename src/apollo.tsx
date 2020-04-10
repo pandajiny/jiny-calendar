@@ -20,3 +20,14 @@ export const REQUST_LOGIN = gql`
     }
   }
 `;
+
+export const REQUST_SIGNUP = gql`
+  mutation requestSignup($name: String, $email: String, $password: String) {
+    requestSignup(name: $name, email: $email, password: $password) {
+      user {
+        name
+        email
+      }
+    }
+  }
+`;

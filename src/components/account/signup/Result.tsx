@@ -3,44 +3,48 @@ import { useLocation, useHistory } from "react-router-dom";
 
 // import apollo module
 import { useMutation } from "react-apollo";
-import { REQUST_LOGIN } from "../../../apollo";
+import { REQUST_SIGNUP } from "../../../apollo";
 
 // for using location.state
 // default location.state's type is {} | null | undefined
 type LocationState =
   | {
+      name?: string;
       email?: string;
       password?: string;
     }
   | null
   | undefined;
 
-export function LoginResult() {
+export function SignupResult() {
   let location = useLocation();
   let history = useHistory();
   // console.log(`loginResult`);
 
   const state: LocationState = location.state;
 
+  let name: string = "";
   let email: string = "";
   let password: string = "";
-  if (state?.email && state.password) {
+  if (state?.email && state.password && state.name) {
+    name = state.name;
     email = state.email;
     password = state.password;
   } else {
     history.push({ pathname: "/account/signup/submit_email", state: {} });
   }
 
-  const [requestLogin, { error, data, loading }] = useMutation(REQUST_LOGIN, {
-    variables: { email: email, password: password },
+  const [requestSignup, { error, data, loading }] = useMutation(REQUST_SIGNUP, {
+    variables: { name: name, email: email, password: password },
     onCompleted: (result) => {
       console.log(result);
-      const { name, email } = result.requestLogin.user;
+      const { name, email } = result.requestSignup.user;
 
       localStorage.setItem("name", name);
       localStorage.setItem("email", email);
+
       history.push({
-        pathname: "/account/login/welcome",
+        pathname: "/account/singup/welcome",
         state: {
           name: name,
           email: email,
@@ -48,15 +52,10 @@ export function LoginResult() {
       });
     },
   });
-
   useEffect(() => {
-    console.log(`Login Result : `);
-    if (!loading) requestLogin();
+    console.log(`signUp Result : `);
+    if (!loading) requestSignup();
   });
 
-  return (
-    <div className="account-login-result">
-      {state?.email} {state?.password}
-    </div>
-  );
+  return <div className="account-login-result">loading data from server</div>;
 }

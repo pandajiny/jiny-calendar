@@ -38,7 +38,9 @@ export function SignupResult() {
     variables: { name: name, email: email, password: password },
     onCompleted: (result) => {
       console.log(result);
-      const { name, email } = result.requestSignup.user;
+      const { isPassed } = result.requestSignup;
+
+      console.log(`isPassed : ${isPassed}`);
 
       localStorage.setItem("name", name);
       localStorage.setItem("email", email);
@@ -54,7 +56,8 @@ export function SignupResult() {
   });
   useEffect(() => {
     console.log(`signUp Result : `);
-    if (!loading) requestSignup();
+    console.log(`loading : ${loading}`);
+    if (!loading && !data) requestSignup();
   });
 
   return <div className="account-login-result">loading data from server</div>;

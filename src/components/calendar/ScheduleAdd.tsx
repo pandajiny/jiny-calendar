@@ -1,10 +1,21 @@
 import React, { useState } from "react";
+
+// MUI important
 import { TextField, Button } from "@material-ui/core";
+
+// context import
 import {
   useScheduleDispatch,
   getCurrentTime,
-  useSelectDateState
+  useSelectDateState,
 } from "./CalendarContext";
+
+// apollo import
+import { useMutation } from "react-apollo";
+import { CREATE_SCHEDULE, CREATE_SCHEDULE_PROPS } from "../../apollo";
+
+// util important
+import { getUserState } from "../../functions";
 
 export function ScheduleAdd() {
   return (
@@ -20,31 +31,51 @@ export function AddForm() {
   const scheduleDispatch = useScheduleDispatch();
   const selectDate = useSelectDateState();
 
+  const [createSchedule, { data }] = useMutation(CREATE_SCHEDULE, {
+    onCompleted: (result) => {
+      console.log(result);
+    },
+  });
+
   const handleSubmit = () => {
     console.log(`SchduleAdd, Schedule Add Button clicked!`);
-    setText("");
     scheduleDispatch({
       type: "CREATE_SCHEDULE",
       newSchedule: {
-        requestTime: getCurrentTime(),
+        // requestTime: getCurrentTime(),
         time: selectDate,
         user: { email: "astic1764@gmail.com", name: "JINY" },
-        content: { isImportant: false, text: text, kind: "Schedule" }
-      }
+        content: { body: text },
+      },
     });
+    // below, apollo code
+    const CreateScheduleVariables: CREATE_SCHEDULE_PROPS = {
+      content: { body: text },
+      time: {
+        year: selectDate.year,
+        month: selectDate.month,
+        date: selectDate.date,
+      },
+      user: {
+        name: getUserState().name || "",
+        email: getUserState().email || "",
+      },
+    };
+    createSchedule({ variables: CreateScheduleVariables });
+    setText("");
   };
 
   return (
     <div className="calendar-schedule-add-form">
       <form
-        onSubmit={e => {
+        onSubmit={(e) => {
           e.preventDefault();
           handleSubmit();
         }}
       >
         <TextField
           value={text}
-          onChange={e => {
+          onChange={(e) => {
             setText(e.target.value);
           }}
         />

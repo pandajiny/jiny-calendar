@@ -9,11 +9,15 @@ export type LoginState = "TRUE" | "FALSE" | undefined;
 
 // Schedule Context
 export type Schedule = {
-  _id?: string;
-  requestTime: Time;
-  time: Time;
+  time: ScheduleTime;
   content: Content;
   user: requestUser;
+};
+
+export type ScheduleTime = {
+  year: number;
+  month: number;
+  date: number;
 };
 
 type requestUser = {
@@ -21,11 +25,7 @@ type requestUser = {
   name: string;
 };
 
-type Content = {
-  text: string;
-  isImportant: boolean;
-  kind: ContentType;
-};
+type Content = { body: String };
 
 type ContentType = "Schedule" | "undefined";
 

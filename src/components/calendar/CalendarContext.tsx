@@ -1,7 +1,7 @@
 import React, { createContext, useContext, Dispatch, useReducer } from "react";
 
 // Schedule Context
-import { Schedule, Time } from "../../Types";
+import { Schedule, Time, ScheduleTime } from "../../Types";
 
 type ScheduleStateProps = Schedule[];
 
@@ -51,22 +51,19 @@ type SelectAction = {
 
 type SelectDispatch = Dispatch<SelectAction>;
 
-const SelectDateState = createContext<Time | undefined>(undefined);
+const SelectDateState = createContext<ScheduleTime | undefined>(undefined);
 
 const SelectDispatchContext = createContext<SelectDispatch | undefined>(
   undefined
 );
 
-function SelectReducer(state: Time, action: SelectAction) {
+function SelectReducer(state: ScheduleTime, action: SelectAction) {
   switch (action.type) {
     case "SELECT_DATE":
       const result = {
         year: action.time.year,
         month: action.time.month,
         date: action.time.date,
-        hour: 0,
-        minute: 0,
-        second: 0,
       };
       console.log(`calendar context; date selected!`);
       console.log(result);
@@ -101,9 +98,6 @@ export function CalendarContextProvider({
     year: today.getFullYear(),
     month: today.getMonth(),
     date: today.getDate(),
-    hour: 0,
-    minute: 0,
-    second: 0,
   });
 
   const initialScheduleArray = [] as ScheduleStateProps;

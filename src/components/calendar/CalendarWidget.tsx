@@ -6,7 +6,7 @@ import {
   useSelectDateState,
   useMonthArray,
   useSelectDispatch,
-  useScheduleState
+  useScheduleState,
 } from "./CalendarContext";
 
 export function CalendarWidget() {
@@ -15,10 +15,25 @@ export function CalendarWidget() {
   const MonthArray = useMonthArray();
 
   const selectDate = useSelectDateState();
+  const SelectDispatch = useSelectDispatch();
 
   return (
     <div>
       {MonthArray[selectDate.month] + ", " + selectDate.year}
+      <button
+        onClick={() => {
+          SelectDispatch({ type: "INCREASE_MONTH" });
+        }}
+      >
+        +
+      </button>
+      <button
+        onClick={() => {
+          SelectDispatch({ type: "DECREASE_MONTH" });
+        }}
+      >
+        -
+      </button>
       <DayList />
       <DateList year={selectDate.year} month={selectDate.month} />
     </div>
@@ -31,7 +46,7 @@ function DayList() {
   return (
     <div className="calendar-widget-daylist">
       <Grid container>
-        {DayArray.map(day => (
+        {DayArray.map((day) => (
           <Grid item md key={day}>
             {day}
           </Grid>
@@ -53,7 +68,7 @@ function DateList({ year, month }: DateListProps) {
   const Schedule = useScheduleState();
 
   const monthSchedule = Schedule.filter(
-    schedule => schedule.time.month === month
+    (schedule) => schedule.time.month === month
   ).sort((a, b) => a.time.date - b.time.date);
   console.log(`current month Schedule : `);
   console.log(monthSchedule);
@@ -63,7 +78,7 @@ function DateList({ year, month }: DateListProps) {
   let countedDate: number = 0;
 
   const ScheduleCounter = (date: number): number => {
-    return Schedule.filter(schedule => schedule.time.date === date).length;
+    return Schedule.filter((schedule) => schedule.time.date === date).length;
   };
 
   const countingDate = (week: number, day: number, value: number) => {
@@ -80,9 +95,9 @@ function DateList({ year, month }: DateListProps) {
 
   return (
     <div className="calendar-widget-date-list">
-      {Weeks.map(week => (
+      {Weeks.map((week) => (
         <Grid key={week} container justify="center">
-          {Days.map(day => (
+          {Days.map((day) => (
             <Grid item md key={day}>
               <DateButton
                 key={countingDate(week, day, 0)}
@@ -115,7 +130,7 @@ function DateButton({ year, month, date, scheduleCount }: DateButtonProps) {
     if (date) {
       SelectDispatch({
         type: "SELECT_DATE",
-        time: { year: year, month: month, date: date }
+        time: { year: year, month: month, date: date },
       });
     }
   };

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { isNumber } from "util";
+import { start } from "repl";
 
 type NoteType = "DIARY" | "ACTION" | "TODO";
 
@@ -56,15 +57,63 @@ type OptionsProps = {
   kind: NoteType;
 };
 
+type ACTION_TIME_INDEX = "START_HOUR" | "START_MIN" | "FIN_HOUR" | "FIN_MIN";
+
 function Options({ kind }: OptionsProps) {
   //Action Option
-  const [startHour, setStartHour] = useState<number>(0);
-  const [startMinute, setStartMinute] = useState<number>(0);
-  const [finishHour, setFinishHour] = useState<number>(0);
-  const [finishMinute, setFinishMinute] = useState<number>(0);
+  const [startHour, setStartHour] = useState<number | null>(null);
+  const [startMin, setStartMin] = useState<number | null>(null);
+  const [finHour, setFinHour] = useState<number | null>(null);
+  const [finMin, setFinMin] = useState<number | null>(null);
 
   // Todo Option
   const [important, setImportant] = useState<Boolean>(false);
+
+  const handleKeyPress = ({
+    e,
+    index,
+  }: {
+    e: React.KeyboardEvent;
+    index: ACTION_TIME_INDEX;
+  }): void => {
+    if (!isNaN(parseInt(e.key))) {
+      const value = parseInt(e.key);
+      console.log(value);
+      switch (index) {
+        case "START_HOUR":
+          if (startHour) {
+            setStartHour(startHour * 10 + value);
+          } else {
+            setStartHour(value);
+          }
+          break;
+        case "START_MIN":
+          if (startMin) {
+            setStartMin(startMin * 10 + value);
+          } else {
+            setStartMin(value);
+          }
+          break;
+        case "FIN_HOUR":
+          if (finHour) {
+            setFinHour(finHour * 10 + value);
+          } else {
+            setFinHour(value);
+          }
+          break;
+        case "FIN_MIN":
+          if (finMin) {
+            setFinMin(finMin * 10 + value);
+          } else {
+            setFinMin(value);
+          }
+          break;
+        default:
+          console.log("unhandled Case");
+          return;
+      }
+    }
+  };
 
   switch (kind) {
     case "DIARY":
@@ -72,44 +121,33 @@ function Options({ kind }: OptionsProps) {
     case "ACTION":
       return (
         <div>
-          Start
           <input
-            value={startHour}
-            onChange={(e) => {
-              if (isNumber(e.target.value))
-                setStartHour(parseInt(e.target.value));
+            value={startHour || 0}
+            onKeyPress={(e) => {
+              handleKeyPress({ e: e, index: "START_HOUR" });
             }}
-            onKeyDown={(e) => {
-              if (isNumber(e.key)) {
-                console.log();
-              }
-            }}
-          />
+          ></input>
           <input
-            value={startMinute}
-            onChange={(e) => {
-              if (isNumber(e.target.value))
-                setStartMinute(parseInt(e.target.value));
+            value={startMin || 0}
+            onKeyPress={(e) => {
+              handleKeyPress({ e: e, index: "START_MIN" });
             }}
-          />
-          <br />
-          Fin
+          ></input>
           <input
-            value={finishHour}
-            onChange={(e) => {
-              if (isNumber(e.target.value))
-                setFinishHour(parseInt(e.target.value));
+            value={finHour || 0}
+            onKeyPress={(e) => {
+              handleKeyPress({ e: e, index: "FIN_HOUR" });
             }}
-          />
+          ></input>
           <input
-            value={finishMinute}
-            onChange={(e) => {
-              if (isNumber(e.target.value))
-                setFinishMinute(parseInt(e.target.value));
+            value={finMin || 0}
+            onKeyPress={(e) => {
+              handleKeyPress({ e: e, index: "FIN_MIN" });
             }}
-          />
-          <p>{"from" + startHour + ":" + startMinute}</p>
-          <p>{"until" + finishHour + ":" + finishMinute}</p>
+          ></input>
+
+          <p>{"from" + startHour + ":" + startMin}</p>
+          <p>{"until" + finHour + ":" + finMin}</p>
         </div>
       );
     case "TODO":

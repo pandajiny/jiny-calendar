@@ -20,6 +20,13 @@ export function NavBar() {
         </Link>
         <Link
           onClick={() => {
+            history.push("/diary");
+          }}
+        >
+          Diary
+        </Link>
+        <Link
+          onClick={() => {
             history.push("/account");
           }}
         >
